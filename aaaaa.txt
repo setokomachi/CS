@@ -1,0 +1,105 @@
+
+'Sub Add(name As String)
+'    Range("A65536").End(xlUp).Offset(1, 0).Value = name
+'End Sub
+
+Sub Add(name As String, GlobalID As String)
+    AddedRow = Range("A65536").End(xlUp).Offset(1, 0).Row
+    Cells(AddedRow, 1).Value = name
+    Cells(AddedRow, 2).Value = GlobalID
+    'Value = name
+End Sub
+
+Sub AddResult(GlobalID As String, Result As String)
+    maxrow = Range("A65536").End(xlUp).Row
+    r = 1
+    Do
+        r = r + 1
+    Loop Until Cells(r, 2) = GlobalID Or maxrow < r
+    If r > maxrow Then
+        Debug.Print "見つかりません"
+    Else
+        Debug.Print r & "行目です"
+        Cells(r, 3).Value = Result
+        'Rows(r).Delete
+    End If
+End Sub
+
+Sub Delete(name As String)
+    maxrow = Range("A65536").End(xlUp).Row
+    r = 1
+    Do
+        r = r + 1
+    Loop Until Cells(r, 1) = name Or maxrow < r
+    If r > maxrow Then
+        Debug.Print "見つかりません"
+    Else
+        Debug.Print r & "行目です"
+        Rows(r).Delete
+    End If
+End Sub
+
+Sub GetUnacquiredGlobalIDs()
+    Dim arr As Object
+    Set arr = CreateObject("System.Collections.ArrayList")
+    
+    maxrow = Range("A65536").End(xlUp).Row
+    For i = 1 To maxrow
+        If Cells(i, 3).Value = "" Then
+            'Debug.Print "発見しました！位置（"; Cells(i, 2).Address(False, False); "）"
+            Debug.Print Cells(i, 2)
+            arr.Add Cells(i, 2).Value
+        End If
+    Next
+End Sub
+
+Sub Clear()
+    'Range("A1").End(xlDown).Select
+    Range("A2:C65536").Clear
+End Sub
+
+Private Sub TestDataGenerator()
+    Call Clear
+    Call Add("hoge1", "foo1")
+    Call Add("hoge2", "foo2")
+    Call Add("hoge3", "foo3")
+    Call Add("hoge4", "foo4")
+    Call Add("hoge5", "foo5")
+    Call AddResult("foo2", "Success")
+    Call AddResult("foo4", "Failure")
+    Call GetUnacquiredGlobalIDs
+End Sub
+
+Sub AddResultTest()
+    Call AddResult("foo2", "Success")
+    Call AddResult("foo4", "Failure")
+End Sub
+
+Sub a()
+    'Range("A1").End(xlDown).Select
+    Range("A65536").End(xlUp).Select
+End Sub
+
+
+Sub c()
+    Range("A65536").End(xlUp).Offset(1, 0).Value = "hoge"
+End Sub
+
+Sub d()
+    Debug.Print Range("A65536").End(xlUp).Row
+End Sub
+
+Sub e()
+    Delete ("hoge")
+End Sub
+
+Sub f()
+    Call Add("hoge", "foo")
+End Sub
+
+
+
+
+
+
+
